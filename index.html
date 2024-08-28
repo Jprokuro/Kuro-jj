@@ -1,0 +1,1047 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jpro kuro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6e8efb;
+            --secondary-color: #5d7ae0;
+            --background-color: #f9f9f9;
+            --text-color: #333;
+            --white: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --background-color: #18191a;
+            --text-color: #e4e6eb;
+            --white: #242526;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+            position: relative;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            background-color: var(--background-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .search-bar {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: inherit;
+        }
+
+        .search-bar button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .voice-search-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .voice-search-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .login-form, .settings-content, .messenger-content {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 80px; /* Adjust margin to avoid overlap with fixed search bar */
+        }
+
+        .settings-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .setting-group {
+            background-color: var(--white);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            text-align: left;
+        }
+
+        .setting-group h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .settings-content .setting-group p {
+            margin: 10px 0;
+        }
+
+        .settings-content .setting-group .progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .settings-content .setting-group .progress-bar .progress {
+            width: 0;
+            height: 10px;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .settings-content a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            transition: color 0.3s;
+        }
+
+        .settings-content a:hover {
+            color: var(--secondary-color);
+        }
+
+        .settings-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+
+        .settings-option i {
+            margin-right: 10px;
+        }
+
+        .settings-option .toggle {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            border-radius: 10px;
+            background: #ccc;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .settings-option .toggle::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--white);
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: transform 0.3s;
+        }
+
+        .settings-option .toggle.active {
+            background: var(--primary-color);
+        }
+
+        .settings-option .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        button, input[type="submit"] {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover, input[type="submit"]:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button:active, input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        input[type="email"], input[type="password"], input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: transparent;
+            color: inherit;
+        }
+
+        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px var(--primary-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 10px 20px;
+            color: var(--white);
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links a {
+            color: var(--white);
+            margin: 0 10px;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 80px; /* Adjust margin to avoid overlap with fixed search bar */
+        }
+
+        .video-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            overflow: hidden;
+            width: 300px;
+        }
+
+        .video-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .video-card h3 {
+            margin: 10px;
+            color: var(--primary-color);
+        }
+
+        .video-card p {
+            margin: 0 10px 10px;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--primary-color);
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .bottom-nav a {
+            color: var(--white);
+            font-size: 18px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        .profile-header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header img {
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-header .profile-picture {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--white);
+        }
+
+        .profile-header .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-header .upload-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .profile-header .upload-button input {
+            display: none;
+        }
+
+        .profile-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile-info h2 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .profile-nav a {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .profile-nav a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .profile-posts, .profile-friends, .profile-photos {
+            display: none;
+        }
+
+        .profile-posts.active, .profile-friends.active, .profile-photos.active {
+            display: block;
+        }
+
+        .post, .friend, .photo {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+
+        .language-selector {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .language-selector.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .language-option:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage" class="centered-container">
+        <div class="login-form">
+            <h1 data-translate="title">jpro kuro</h1>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required data-translate="emailPlaceholder">
+                <input type="password" id="password" placeholder="Password" required data-translate="passwordPlaceholder">
+                <button type="submit" data-translate="loginButton">Log In</button>
+            </form>
+            <p><a href="#" data-translate="forgotPassword">Forgot password?</a></p>
+            <button id="signup" data-translate="createAccountButton">Create New Account</button>
+        </div>
+    </div>
+
+    <div id="homePage" style="display: none;">
+        <div class="search-bar-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for videos or friends..." data-translate="searchPlaceholder">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+                <button class="voice-search-button" id="voiceSearchButton"><i class="fas fa-microphone"></i></button>
+            </div>
+        </div>
+        <div class="content" id="searchResults">
+            <div class="video-card">
+                <img src="https://via.placeholder.com/600x400" alt="Video Thumbnail">
+                <h3 data-translate="videoTitle">Video Title</h3>
+                <p data-translate="videoDescription">Description of the video.</p>
+            </div>
+            <div class="video-card">
+                <img src="https://via.placeholder.com/600x400" alt="Video Thumbnail">
+                <h3 data-translate="videoTitle">Video Title</h3>
+                <p data-translate="videoDescription">Description of the video.</p>
+            </div>
+            <div class="video-card">
+                <img src="https://via.placeholder.com/600x400" alt="Video Thumbnail">
+                <h3 data-translate="videoTitle">Video Title</h3>
+                <p data-translate="videoDescription">Description of the video.</p>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="#" id="homeLink"><i class="fas fa-home"></i><span data-translate="home">Home</span></a>
+            <a href="#" id="profileLink"><i class="fas fa-user"></i><span data-translate="profile">Profile</span></a>
+            <a href="#"><i class="fas fa-users"></i><span data-translate="friends">Friends</span></a>
+            <a href="#" id="messengerLink"><i class="fas fa-envelope"></i><span data-translate="messenger">Messenger</span></a>
+            <a href="#"><i class="fas fa-bell"></i><span data-translate="notifications">Notifications</span></a>
+            <a href="#" id="settingsLink"><i class="fas fa-cog"></i><span data-translate="settings">Settings</span></a>
+        </div>
+    </div>
+
+    <div id="settingsPage" class="centered-container" style="display: none;">
+        <button class="back-button" id="backToHomeSettings">↩️</button>
+        <div class="settings-content">
+            <h2 data-translate="generalAccountSettings">General Account Settings</h2>
+            <div class="setting-group">
+                <h3 data-translate="name">Name</h3>
+                <input type="text" id="nameInput" placeholder="Enter your name" required data-translate="namePlaceholder">
+            </div>
+            <div class="setting-group">
+                <h3 data-translate="email">Email</h3>
+                <p id="displayEmail">john@example.com</p>
+            </div>
+            <div class="setting-group">
+                <h3 data-translate="password">Password</h3>
+                <p id="displayPassword">*********</p>
+            </div>
+            <div class="setting-group">
+                <h3 data-translate="uploadVideo">Upload Video</h3>
+                <input type="text" id="videoTitle" placeholder="Video Title" required data-translate="videoTitlePlaceholder">
+                <textarea id="videoDescription" placeholder="Video Description" rows="3" required data-translate="videoDescriptionPlaceholder"></textarea>
+                <label for="videoUploadInput" data-translate="chooseVideo">Choose a video</label>
+                <input type="file" id="videoUploadInput" accept="video/*">
+                <button id="uploadVideoButton" data-translate="uploadVideoButton">Upload Video</button>
+                <div class="progress-bar">
+                    <div class="progress" id="uploadProgress"></div>
+                </div>
+                <p id="uploadStatus"></p>
+            </div>
+
+            <div class="setting-group">
+                <div class="settings-option" id="languageOption">
+                    <div>
+                        <i class="fas fa-language"></i>
+                        <span data-translate="language">Language</span>
+                    </div>
+                </div>
+                <div class="language-selector" id="languageSelector">
+                    <div class="language-option" data-language="en">English</div>
+                    <div class="language-option" data-language="hi">हिन्दी</div>
+                    <div class="language-option" data-language="bn">বাংলা</div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-bell"></i>
+                        <span data-translate="notifications">নোটিফিকেশন</span>
+                    </div>
+                    <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <span data-translate="avatarPayment">অবতার এবং পেমেন্ট</span>
+                    </div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-moon"></i>
+                        <span data-translate="darkMode">ডার্ক মোড</span>
+                    </div>
+                    <div class="toggle" id="darkModeToggle" onclick="toggleDarkMode()"></div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-signal"></i>
+                        <span data-translate="dataSaver">ডেটা/স্টোরেজ সেভার মোড</span>
+                    </div>
+                    <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-plane"></i>
+                        <span data-translate="clearTravel">ভ্রমণ খালি করুন</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <h3 data-translate="helpSupport">সাহায্যতা</h3>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-life-ring"></i>
+                        <span data-translate="help">সাহায্য</span>
+                    </div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-tools"></i>
+                        <span data-translate="supportInquiry">সাহায্যতা ইঙ্কয়ারি</span>
+                    </div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-info-circle"></i>
+                        <span data-translate="identity">পরিচয়</span>
+                    </div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span data-translate="reportProblem">একটি সমস্যা রিপোর্ট করুন</span>
+                    </div>
+                </div>
+                <div class="settings-option">
+                    <div>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-translate="logout">লগ আউট করুন</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" id="logoutSettings" data-translate="logout">Log Out</a>
+        </div>
+    </div>
+
+    <div id="messengerPage" class="centered-container" style="display: none;">
+        <button class="back-button" id="backToHomeMessenger">↩️</button>
+        <div class="messenger-content">
+            <div class="messenger-header" data-translate="messenger">Messenger</div>
+            <div class="messages">
+                <div class="message received">
+                    <div class="bubble" data-translate="receivedMessage">Hello! How are you?</div>
+                </div>
+                <div class="message sent">
+                    <div class="bubble" data-translate="sentMessage">I'm good, thanks! How about you?</div>
+                </div>
+            </div>
+            <div class="message-input">
+                <input type="text" id="messageText" placeholder="Type a message..." data-translate="messagePlaceholder">
+                <button id="sendMessage" data-translate="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="profilePage" style="display: none;">
+        <button class="back-button" id="backToHomeProfile">↩️</button>
+        <div class="profile-header">
+            <img id="coverPhoto" src="https://via.placeholder.com/1200x200" alt="Cover Photo">
+            <button class="upload-button" data-translate="changeCoverPhoto">
+                Change Cover Photo
+                <input type="file" id="coverPhotoInput" accept="image/*">
+            </button>
+            <div class="profile-picture">
+                <img id="profilePic" src="https://via.placeholder.com/100" alt="Profile Picture">
+                <button class="upload-button" style="bottom: -30px; left: 50%; transform: translateX(-50%);" data-translate="changeProfilePhoto">
+                    Change Profile Picture
+                    <input type="file" id="profilePicInput" accept="image/*">
+                </button>
+            </div>
+        </div>
+        <div class="profile-content">
+            <div class="profile-info">
+                <h2 data-translate="profileName">John Doe</h2>
+                <p data-translate="profileBio">Software Engineer at ABC Corp</p>
+            </div>
+            <div class="profile-nav">
+                <a href="#" id="postsLink" data-translate="posts">Posts</a>
+                <a href="#" id="friendsLink" data-translate="friends">Friends</a>
+                <a href="#" id="photosLink" data-translate="photos">Photos</a>
+            </div>
+            <div class="profile-posts active">
+                <div class="post">
+                    <h2 data-translate="postTitle">Post Title</h2>
+                    <p data-translate="postContent">This is a dummy post to showcase the layout.</p>
+                </div>
+                <!-- Add more posts here -->
+            </div>
+            <div class="profile-friends">
+                <div class="friend">
+                    <img src="https://via.placeholder.com/100" alt="Friend">
+                    <h2 data-translate="friendName">Friend Name</h2>
+                </div>
+                <!-- Add more friends here -->
+            </div>
+            <div class="profile-photos">
+                <div class="photo">
+                    <img src="https://via.placeholder.com/400x400" alt="Photo">
+                </div>
+                <!-- Add more photos here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('body > div').forEach(page => {
+                if (page.style.display !== 'none') {
+                    page.style.opacity = 0;
+                    setTimeout(() => page.style.display = 'none', 300);
+                }
+            });
+
+            const newPage = document.getElementById(pageId);
+            newPage.style.display = 'flex';
+            setTimeout(() => newPage.style.opacity = 1, 10);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('body > div').forEach(page => {
+                page.style.transition = 'opacity 0.3s';
+                if (page.id !== 'loginPage') {
+                    page.style.display = 'none';
+                    page.style.opacity = 0;
+                }
+            });
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (email && password) {
+                showPage('homePage');
+                document.getElementById('displayEmail').innerText = email;
+                document.getElementById('displayPassword').innerText = password;
+            } else {
+                alert('Please enter both email and password');
+            }
+        });
+
+        document.getElementById('logoutSettings').addEventListener('click', () => showPage('loginPage'));
+        document.getElementById('settingsLink').addEventListener('click', () => showPage('settingsPage'));
+        document.getElementById('homeLink').addEventListener('click', () => showPage('homePage'));
+        document.getElementById('backToHomeSettings').addEventListener('click', () => showPage('homePage'));
+        document.getElementById('messengerLink').addEventListener('click', () => showPage('messengerPage'));
+        document.getElementById('backToHomeMessenger').addEventListener('click', () => showPage('homePage'));
+        document.getElementById('profileLink').addEventListener('click', () => showPage('profilePage'));
+        document.getElementById('backToHomeProfile').addEventListener('click', () => showPage('homePage'));
+
+        document.getElementById('postsLink').addEventListener('click', function() {
+            showProfileSection('profile-posts');
+        });
+        document.getElementById('friendsLink').addEventListener('click', function() {
+            showProfileSection('profile-friends');
+        });
+        document.getElementById('photosLink').addEventListener('click', function() {
+            showProfileSection('profile-photos');
+        });
+
+        function showProfileSection(sectionId) {
+            document.querySelectorAll('.profile-content > div').forEach(section => section.classList.remove('active'));
+            document.querySelector(`.${sectionId}`).classList.add('active');
+        }
+
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            const messageText = document.getElementById('messageText').value;
+
+            if (messageText.trim()) {
+                const messagesContainer = document.querySelector('.messages');
+                const newMessage = document.createElement('div');
+                newMessage.classList.add('message', 'sent');
+                newMessage.innerHTML = `<div class="bubble" data-translate="sentMessage">${messageText}</div>`;
+                messagesContainer.appendChild(newMessage);
+                document.getElementById('messageText').value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        });
+
+        document.getElementById('profilePicInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePic').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('coverPhotoInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('coverPhoto').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('uploadVideoButton').addEventListener('click', function() {
+            const videoTitle = document.getElementById('videoTitle').value;
+            const videoDescription = document.getElementById('videoDescription').value;
+            const videoFile = document.getElementById('videoUploadInput').files[0];
+
+            if (videoTitle && videoDescription && videoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const videoURL = e.target.result;
+                    const post = document.createElement('div');
+                    post.classList.add('video-card');
+                    post.innerHTML = `<img src="https://via.placeholder.com/600x400" alt="Video Thumbnail"><h3 data-translate="videoTitle">${videoTitle}</h3><p data-translate="videoDescription">${videoDescription}</p><video controls><source src="${videoURL}" type="${videoFile.type}">Your browser does not support the video tag.</video>`;
+                    document.getElementById('searchResults').appendChild(post);
+                    document.getElementById('uploadStatus').innerText = "Upload Successful!";
+                }
+                reader.readAsDataURL(videoFile);
+                reader.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = (event.loaded / event.total) * 100;
+                        document.getElementById('uploadProgress').style.width = percentComplete + '%';
+                    }
+                };
+                reader.onloadstart = function() {
+                    document.getElementById('uploadProgress').style.width = '0%';
+                    document.getElementById('uploadStatus').innerText = "Uploading...";
+                };
+                reader.onloadend = function() {
+                    document.getElementById('uploadProgress').style.width = '100%';
+                    document.getElementById('uploadStatus').innerText = "Upload Complete!";
+                    showPage('homePage');
+                };
+            } else {
+                alert('Please fill in all fields and choose a video file.');
+            }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', function() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+
+            const videos = [
+                { title: 'Video 1', description: 'Description of Video 1' },
+                { title: 'Video 2', description: 'Description of Video 2' },
+                { title: 'Video 3', description: 'Description of Video 3' },
+            ];
+
+            const friends = [
+                { name: 'Friend 1' },
+                { name: 'Friend 2' },
+                { name: 'Friend 3' },
+            ];
+
+            const highlightQuery = (text, query) => text.replace(new RegExp(query, 'gi'), match => `<span class="highlight">${match}</span>`);
+
+            videos.filter(video => video.title.toLowerCase().includes(query)).forEach(video => {
+                const post = document.createElement('div');
+                post.classList.add('video-card');
+                post.innerHTML = `<img src="https://via.placeholder.com/600x400" alt="Video Thumbnail"><h3 data-translate="videoTitle">${highlightQuery(video.title, query)}</h3><p data-translate="videoDescription">${highlightQuery(video.description, query)}</p>`;
+                searchResults.appendChild(post);
+            });
+
+            friends.filter(friend => friend.name.toLowerCase().includes(query)).forEach(friend => {
+                const post = document.createElement('div');
+                post.classList.add('video-card');
+                post.innerHTML = `<img src="https://via.placeholder.com/600x400" alt="Friend"><h3 data-translate="friendName">${highlightQuery(friend.name, query)}</h3>`;
+                searchResults.appendChild(post);
+            });
+        });
+
+        document.getElementById('voiceSearchButton').addEventListener('click', function() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const query = event.results[0][0].transcript.toLowerCase();
+                document.getElementById('searchInput').value = query;
+                document.getElementById('searchButton').click();
+            };
+
+            recognition.onerror = function(event) {
+                console.error(event.error);
+            };
+        });
+
+        const translations = {
+            en: {
+                title: "jpro kuro",
+                emailPlaceholder: "Email",
+                passwordPlaceholder: "Password",
+                loginButton: "Log In",
+                forgotPassword: "Forgot password?",
+                createAccountButton: "Create New Account",
+                searchPlaceholder: "Search for videos or friends...",
+                videoTitle: "Video Title",
+                videoDescription: "Description of the video.",
+                home: "Home",
+                profile: "Profile",
+                friends: "Friends",
+                messenger: "Messenger",
+                notifications: "Notifications",
+                settings: "Settings",
+                generalAccountSettings: "General Account Settings",
+                name: "Name",
+                namePlaceholder: "Enter your name",
+                email: "Email",
+                password: "Password",
+                uploadVideo: "Upload Video",
+                videoTitlePlaceholder: "Video Title",
+                videoDescriptionPlaceholder: "Video Description",
+                chooseVideo: "Choose a video",
+                uploadVideoButton: "Upload Video",
+                language: "Language",
+                notifications: "Notifications",
+                avatarPayment: "Avatar and Payment",
+                darkMode: "Dark Mode",
+                dataSaver: "Data/Storage Saver Mode",
+                clearTravel: "Clear Travel",
+                helpSupport: "Help",
+                help: "Help",
+                supportInquiry: "Support Inquiry",
+                identity: "Identity",
+                reportProblem: "Report a Problem",
+                logout: "Log Out",
+                messenger: "Messenger",
+                receivedMessage: "Hello! How are you?",
+                sentMessage: "I'm good, thanks! How about you?",
+                messagePlaceholder: "Type a message...",
+                sendMessage: "Send",
+                changeCoverPhoto: "Change Cover Photo",
+                changeProfilePhoto: "Change Profile Picture",
+                profileName: "John Doe",
+                profileBio: "Software Engineer at ABC Corp",
+                posts: "Posts",
+                photos: "Photos",
+                postTitle: "Post Title",
+                postContent: "This is a dummy post to showcase the layout.",
+                friendName: "Friend Name"
+            },
+            hi: {
+                title: "jpro kuro",
+                emailPlaceholder: "ईमेल",
+                passwordPlaceholder: "पासवर्ड",
+                loginButton: "लॉग इन करें",
+                forgotPassword: "पासवर्ड भूल गए?",
+                createAccountButton: "नया खाता बनाएँ",
+                searchPlaceholder: "वीडियो या दोस्तों के लिए खोजें...",
+                videoTitle: "वीडियो का शीर्षक",
+                videoDescription: "वीडियो का वर्णन।",
+                home: "होम",
+                profile: "प्रोफाइल",
+                friends: "दोस्त",
+                messenger: "संदेशवाहक",
+                notifications: "सूचनाएं",
+                settings: "सेटिंग्स",
+                generalAccountSettings: "सामान्य खाता सेटिंग्स",
+                name: "नाम",
+                namePlaceholder: "अपना नाम दर्ज करें",
+                email: "ईमेल",
+                password: "पासवर्ड",
+                uploadVideo: "वीडियो अपलोड करें",
+                videoTitlePlaceholder: "वीडियो का शीर्षक",
+                videoDescriptionPlaceholder: "वीडियो का वर्णन",
+                chooseVideo: "एक वीडियो चुनें",
+                uploadVideoButton: "वीडियो अपलोड करें",
+                language: "भाषा",
+                notifications: "सूचनाएं",
+                avatarPayment: "अवतार और भुगतान",
+                darkMode: "डार्क मोड",
+                dataSaver: "डेटा/स्टोरेज सेविंग मोड",
+                clearTravel: "यात्रा साफ़ करें",
+                helpSupport: "सहायता",
+                help: "मदद",
+                supportInquiry: "सहायता पूछताछ",
+                identity: "पहचान",
+                reportProblem: "समस्या की रिपोर्ट करें",
+                logout: "लॉग आउट",
+                messenger: "संदेशवाहक",
+                receivedMessage: "नमस्ते! आप कैसे हैं?",
+                sentMessage: "मैं ठीक हूँ, धन्यवाद! आप कैसे हैं?",
+                messagePlaceholder: "संदेश टाइप करें...",
+                sendMessage: "भेजें",
+                changeCoverPhoto: "कवर फोटो बदलें",
+                changeProfilePhoto: "प्रोफाइल फोटो बदलें",
+                profileName: "जॉन डो",
+                profileBio: "एबीसी कॉर्प में सॉफ्टवेयर इंजीनियर",
+                posts: "पोस्ट",
+                photos: "फोटो",
+                postTitle: "पोस्ट शीर्षक",
+
+                postContent: "यह लेआउट को दिखाने के लिए एक नकली पोस्ट है।",
+                friendName: "मित्र का नाम"
+            },
+            bn: {
+                title: "jpro kuro",
+                emailPlaceholder: "ইমেল",
+                passwordPlaceholder: "পাসওয়ার্ড",
+                loginButton: "লগ ইন করুন",
+                forgotPassword: "পাসওয়ার্ড ভুলে গেছেন?",
+                createAccountButton: "নতুন অ্যাকাউন্ট তৈরি করুন",
+                searchPlaceholder: "ভিডিও বা বন্ধুদের জন্য অনুসন্ধান করুন...",
+                videoTitle: "ভিডিও শিরোনাম",
+                videoDescription: "ভিডিওর বর্ণনা।",
+                home: "হোম",
+                profile: "প্রোফাইল",
+                friends: "বন্ধুরা",
+                messenger: "মেসেঞ্জার",
+                notifications: "বিজ্ঞপ্তি",
+                settings: "সেটিংস",
+                generalAccountSettings: "সাধারণ অ্যাকাউন্ট সেটিংস",
+                name: "নাম",
+                namePlaceholder: "আপনার নাম লিখুন",
+                email: "ইমেল",
+                password: "পাসওয়ার্ড",
+                uploadVideo: "ভিডিও আপলোড করুন",
+                videoTitlePlaceholder: "ভিডিও শিরোনাম",
+                videoDescriptionPlaceholder: "ভিডিওর বর্ণনা",
+                chooseVideo: "একটি ভিডিও চয়ন করুন",
+                uploadVideoButton: "ভিডিও আপলোড করুন",
+                language: "ভাষা",
+                notifications: "নোটিফিকেশন",
+                avatarPayment: "অবতার এবং পেমেন্ট",
+                darkMode: "ডার্ক মোড",
+                dataSaver: "ডেটা/স্টোরেজ সেভার মোড",
+                clearTravel: "ভ্রমণ খালি করুন",
+                helpSupport: "সাহায্যতা",
+                help: "সাহায্য",
+                supportInquiry: "সাহায্যতা ইঙ্কয়ারি",
+                identity: "পরিচয়",
+                reportProblem: "একটি সমস্যা রিপোর্ট করুন",
+                logout: "লগ আউট করুন",
+                messenger: "মেসেঞ্জার",
+                receivedMessage: "হ্যালো! আপনি কেমন আছেন?",
+                sentMessage: "আমি ভালো, ধন্যবাদ! আপনি কেমন আছেন?",
+                messagePlaceholder: "একটি বার্তা টাইপ করুন...",
+                sendMessage: "পাঠান",
+                changeCoverPhoto: "কভার ফটো পরিবর্তন করুন",
+                changeProfilePhoto: "প্রোফাইল ফটো পরিবর্তন করুন",
+                profileName: "জন ডো",
+                profileBio: "এবিসি কর্পে সফটওয়্যার ইঞ্জিনিয়ার",
+                posts: "পোস্ট",
+                photos: "ফটো",
+                postTitle: "পোস্ট শিরোনাম",
+                postContent: "এটি লেআউট প্রদর্শন করার জন্য একটি ডামি পোস্ট।",
+                friendName: "বন্ধুর নাম"
+            }
+        };
+
+        function translatePage(language) {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                element.textContent = translations[language][key];
+            });
+        }
+
+        document.getElementById('languageOption').addEventListener('click', function() {
+            document.getElementById('languageSelector').classList.toggle('active');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedLanguage = this.getAttribute('data-language');
+                translatePage(selectedLanguage);
+                document.getElementById('languageSelector').classList.remove('active');
+            });
+        });
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
